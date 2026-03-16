@@ -10,13 +10,14 @@ const OrbitalHUD = ({ currentSection, show }) => {
 
   return (
     <div 
-  className="fixed inset-0 pointer-events-none z-40 flex items-center justify-center transition-all duration-700 ease-in-out"
-  style={{ 
-    opacity: show ? 1 : 0,
-    visibility: show ? 'visible' : 'hidden', // Forces the browser to stop rendering it
-    transform: show ? 'scale(1)' : 'scale(1.1)' // Adds a nice "zoom away" effect
-  }}
->
+      className="fixed inset-0 pointer-events-none z-40 flex items-center justify-center transition-all duration-700 ease-in-out"
+      style={{ 
+        opacity: show ? 1 : 0,
+        visibility: show ? 'visible' : 'hidden', // Forces it to disappear from the engine
+        transform: show ? 'scale(1)' : 'scale(1.1)', // Smooth zoom out
+        pointerEvents: 'none'
+      }}
+    >
       {/* The main rotating ring */}
       <div className="relative w-72 h-72 rounded-full border border-cyan-500/20 flex items-center justify-center">
         
