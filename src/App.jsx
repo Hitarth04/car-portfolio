@@ -14,7 +14,7 @@ function App() {
   const [currentSection, setCurrentSection] = useState(0);
   const [showHUD, setShowHUD] = useState(false);
   
-  // This Ref is the "box" that keeps our timer safe across re-renders
+  // Persistent reference for the hide timer to prevent it from being lost on re-renders
   const hudTimerRef = useRef(null);
 
   const handleStart = () => {
@@ -30,13 +30,13 @@ function App() {
     if (!engineStarted) return;
 
     const handleWheel = (e) => {
-      // 1. Show the HUD immediately
+      // 1. Show the HUD immediately when scrolling starts
       setShowHUD(true);
 
-      // 2. Clear any existing timer so they don't fight
+      // 2. Clear any existing timer to reset the 1-second countdown
       if (hudTimerRef.current) clearTimeout(hudTimerRef.current);
 
-      // 3. Gear Shifting (using functional updates to prevent skipping)
+      // 3. Section Shifting (Using functional updates to ensure smooth transitions)
       if (!isWarping) {
         if (e.deltaY > 20) {
           setCurrentSection((prev) => (prev < 3 ? prev + 1 : prev));
@@ -45,20 +45,21 @@ function App() {
         }
       }
 
-      // 4. SET THE TIMER TO HIDE THE HUD
+      // 4. Set the timer to hide the HUD after 1 second of inactivity
       hudTimerRef.current = setTimeout(() => {
         setShowHUD(false);
-      }, 1200); // 1.2 seconds of no scrolling = hide wheel
+      }, 1000);
     };
 
     window.addEventListener('wheel', handleWheel, { passive: true });
+    
     return () => {
       window.removeEventListener('wheel', handleWheel);
       if (hudTimerRef.current) clearTimeout(hudTimerRef.current);
     };
   }, [engineStarted, isWarping]); 
 
-  // Visual Warp Effect trigger
+  // Visual Warp Effect trigger when the section changes
   useEffect(() => {
     if (engineStarted) {
       setIsWarping(true);
@@ -71,7 +72,7 @@ function App() {
     <main className="bg-black text-white min-h-screen cursor-none overflow-hidden">
       <CarMouse isWarping={isWarping} />
       
-      {/* HUD layer */}
+      {/* HUD layer anchored to the screen center */}
       <OrbitalHUD currentSection={currentSection} show={showHUD} />
       
       {!engineStarted ? (

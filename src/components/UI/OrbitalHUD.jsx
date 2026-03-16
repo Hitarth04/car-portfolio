@@ -13,8 +13,8 @@ const OrbitalHUD = ({ currentSection, show }) => {
       className="fixed inset-0 pointer-events-none z-40 flex items-center justify-center transition-all duration-700 ease-in-out"
       style={{ 
         opacity: show ? 1 : 0,
-        visibility: show ? 'visible' : 'hidden', // Forces it to disappear from the engine
-        transform: show ? 'scale(1)' : 'scale(1.1)', // Smooth zoom out
+        visibility: show ? 'visible' : 'hidden', // Forces the browser to hide it
+        transform: show ? 'scale(1)' : 'scale(1.1)', 
         pointerEvents: 'none'
       }}
     >
